@@ -20,7 +20,7 @@ The game can be tested/run on localserver in browser. For in class playing I use
 
 The code is based on Python Client-Server interaction tutorials by TechWithTim: [1](https://www.youtube.com/watch?v=-3B1v-K1oXE), [2](https://www.youtube.com/watch?v=3QiPPX-KeSc&t=2607s) 
 
-To build exe files use pyinstaller package (exapmle for Administrator player:
+To build exe files use pyinstaller package (exapmle for Administrator player):
 ```
 pyinstaller -F  adm_remi_st.py
 ```
