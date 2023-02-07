@@ -19,3 +19,8 @@ Passphrase for connection is set to "1". Default port for a server is "5555". Ga
 The game can be tested/run on localserver in browser. For in class playing I used VPS server in cheapest configuration: 1x2.2 GHz, 0.5Gb RAM, HDD, Debian 10 or Ubuntu 20.04 (any other linux server can be used too)
 
 The code is based on Python Client-Server interaction tutorials by TechWithTim: [1](https://www.youtube.com/watch?v=-3B1v-K1oXE), [2](https://www.youtube.com/watch?v=3QiPPX-KeSc&t=2607s) 
+
+To build exe files use pyinstaller package (exapmle for Administrator player:
+```
+pyinstaller -F  adm_remi_st.py
+```
