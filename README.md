@@ -11,6 +11,9 @@ Running sequence (py or exe files):
 1. server: server3_stm
 2. players & administrator: adm_remi_st, ret_remi_st, distr_remi_st, whole_remi_st, plant_remi_st
 
+File structure (for administrator, same for other players): adm_remi_st.py (main logic), adm_remi_st_gui.py (GUI)
+In case of executable file both logic and GUI are combined in adm_remi_st.exe
+
 User interface (for Retailer):
 
 <img src="https://user-images.githubusercontent.com/55400375/217362979-ea1a6c9e-51cb-4ed7-b373-be667b7370cd.png" width="622" height="499">
