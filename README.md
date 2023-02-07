@@ -7,6 +7,10 @@ Author: Maxim Rozhkov [youtube channel](https://www.youtube.com/channel/UCxcUanI
 
 The supply chain game consists of administrator, who sets period and demand level and four players: Retailer, Distributor, Wholesaler and Plant
 
+Running sequence (py or exe files): 
+1. server: server3_stm
+2. players & administrator: adm_remi_st, ret_remi_st, distr_remi_st, whole_remi_st, plant_remi_st
+
 User interface (for Retailer):
 
 <img src="https://user-images.githubusercontent.com/55400375/217362979-ea1a6c9e-51cb-4ed7-b373-be667b7370cd.png" width="622" height="499">
