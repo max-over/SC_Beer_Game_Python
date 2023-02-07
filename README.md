@@ -14,7 +14,7 @@ Requirements:
 remi==2022.7.27
 xlwt==1.3.0
 ```
-Passphrase for connection is set to "1". Default port for a server is "5555".
+Passphrase for connection is set to "1". Default port for a server is "5555". Game statistics is written in Excel files
 
 The game can be tested/run on localserver in browser. For in class playing I used VPS server in cheapest configuration: 1x2.2 GHz, 0.5Gb RAM, HDD, Debian 10 or Ubuntu 20.04 (any other linux server can be used too)
 
