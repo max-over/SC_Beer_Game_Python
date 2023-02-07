@@ -29,4 +29,4 @@ To build exe files use pyinstaller package (example for Administrator player):
 pyinstaller -F  adm_remi_st.py
 ```
 
-Compiled exe files with default parameters: https://disk.yandex.ru/d/mZD4eJP-xYocZA
+Compiled exe files with default parameters: [Link1](https://drive.google.com/drive/folders/1rMDaPQhDsZZ5Z-XPM_l0_03w8-x673oM?usp=sharing) [Link2](https://disk.yandex.ru/d/mZD4eJP-xYocZA) 
