@@ -222,7 +222,7 @@ class plant_remi(App):
             self.inventory_finished = 0
         else:
             self.backlogtotal = self.backlogtotal - (prodshipment - self.current_demand)
-            self.wb.save('distr_stat.xls')
+            self.wb.save(f"plant_stat{textEditPortPlant.get_text()}_{self.xtime}.xls")
             self.inventory_finished += - int(prodshipment)
 
     def on_button_plant_order_pressed(self, textEditOrderPlant, button_plant_order, textEditPortPlant, widget):
