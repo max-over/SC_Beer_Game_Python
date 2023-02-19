@@ -151,7 +151,10 @@ class SocketServer:
             has_order = "yes" if order else "no"
             shipment = shipments.get(name, "")
             has_shipment = "yes" if shipment else "no"
-            status += f"{name}: order: {has_order} shipment: {has_shipment}\n"
+            if name == "Retailer":
+                status += f"{name}: order: {has_order}\n"
+            else:
+                status += f"{name}: order: {has_order} shipment: {has_shipment}\n"
 
         client.sendall(pickle.dumps(status))
 
