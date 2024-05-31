@@ -52,7 +52,7 @@ class distr_remi(App):
         self.sheet_distr.write(0, 6, "Backlog")
         self.sheet_distr.write(0, 7, "SL")
         self.sheet_distr.write(0, 8, "Inventory_Costs")
-        self.sheet_distr.write(0, 9, "Lost_sales_Costs")
+        self.sheet_distr.write(0, 9, "Backlog_Costs")
         # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
         if not 'editing_mode' in kwargs.keys():
             super(distr_remi, self).__init__(*args, static_file_path={'my_res':'./res/'})
