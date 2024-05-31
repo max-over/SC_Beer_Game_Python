@@ -202,7 +202,7 @@ class plant_remi(App):
             self.sheet_plant.write(int(self.current_period), 5, int(self.inventory_finished))
             self.sheet_plant.write(int(self.current_period), 6, int(self.produced_lot))
             self.sheet_plant.write(int(self.current_period), 7, int(self.costs))
-            self.sheet_plant.write(int(self.current_period), 8, int(self.backlog))
+            self.sheet_plant.write(int(self.current_period), 8, int(self.backlogtotal))
             self.sheet_plant.write(int(self.current_period), 9, float(self.sl))
             self.wb.save(f"plant_stat{textEditPortPlant.get_text()}_{self.xtime}.xls")
             label_plant_sl.set_text(f"Backlog periods: {self.backlogcount}")
@@ -215,13 +215,12 @@ class plant_remi(App):
         textEditShipmentPlant.set_text(str(prodshipment))
 
     def update_backlog_and_inventory_demand(self, prodshipment):
+        self.backlogtotal += self.current_demand - prodshipment
         if int(self.current_demand) > int(prodshipment):
             self.backlog = int(self.current_demand) - int(prodshipment)
-            self.backlogtotal += - (prodshipment - self.current_demand)
             self.backlogcount += 1
             self.inventory_finished = 0
         else:
-            self.backlogtotal = self.backlogtotal - (prodshipment - self.current_demand)
             self.inventory_finished += - int(prodshipment)
 
     def on_button_plant_order_pressed(self, textEditOrderPlant, button_plant_order, textEditPortPlant, widget):
