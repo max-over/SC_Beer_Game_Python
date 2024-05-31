@@ -64,7 +64,7 @@ class plant_remi(App):
         self.sheet_plant.write(0, 8, "Backlog")
         self.sheet_plant.write(0, 9, "SL")
         self.sheet_plant.write(0, 10, "Inventory_costs")
-        self.sheet_plant.write(0, 11, "Lost_sales_costs")
+        self.sheet_plant.write(0, 11, "Backlog_Costs")
         # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
         if not 'editing_mode' in kwargs.keys():
             super(plant_remi, self).__init__(*args, static_file_path={'my_res':'./res/'})
