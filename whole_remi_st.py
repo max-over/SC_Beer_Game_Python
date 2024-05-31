@@ -141,7 +141,7 @@ class whole_remi(App):
 
     def update_costs(self):
         self.inventorycosts += self.inventory * self.holdingrate
-        self.backlogcosts = self.backlogtotal * self.backlograte
+        self.backlogcosts += self.backlogtotal * self.backlograte
         self.costs = self.inventorycosts + self.backlogcosts
 
     def on_button_whole_shipment_pressed(self, textEditShipmentWholesaler, label_whole_inventory, label_whole_sl,
