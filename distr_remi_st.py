@@ -142,7 +142,7 @@ class distr_remi(App):
 
     def update_costs(self):
         self.inventorycosts += self.inventory * self.holdingrate
-        self.backlogcosts = self.backlogtotal * self.backlograte
+        self.backlogcosts += self.backlogtotal * self.backlograte
         self.costs = self.inventorycosts + self.backlogcosts
 
     def on_button_distr_shipment_pressed(self, textEditShipmentDistributor, label_distr_inventory, label_distr_sl,
