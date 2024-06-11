@@ -174,7 +174,7 @@ class ret_remi(App):
 
     def update_costs(self):
         self.inventorycosts += self.inventory * self.holdingrate
-        self.backlogcosts += self.backlogtotal * self.backlograte
+        self.backlogcosts = self.backlogtotal * self.backlograte
         self.costs = self.inventorycosts + self.backlogcosts
 
     def on_button_ret_place_order_pressed(self, textEditOrderRetailer, textEditPortRet, button_ret_order, widget):
