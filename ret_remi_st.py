@@ -119,14 +119,16 @@ class ret_remi(App):
             self.sheet_ret.write(int(self.current_period), 0, int(self.current_period))
             self.wb.save(f'ret_stat{textEditPortRet.get_text()}_{self.xtime}.xls')
 
-            if self.current_period > 1:
-                shipment = self.n.send(pickle.dumps(ProcessData("upd_ret_distr_shipment",
-                                                                [self.current_period], self.leadtimeup)))
-                self.update_backlog_and_inventory_shipment(shipment)
+
 
             demand = self.n.send(pickle.dumps(ProcessData("upd_ret_cust_demand", [0], 0)))
             self.current_demand = demand.data_leadtimeup
             print(self.current_demand)
+
+            if self.current_period > 1:
+                shipment = self.n.send(pickle.dumps(ProcessData("upd_ret_distr_shipment",
+                                                                [self.current_period], self.leadtimeup)))
+                self.update_backlog_and_inventory_shipment(shipment)
 
             self.update_costs()
             self.update_backlog_and_inventory_demand()
@@ -153,13 +155,8 @@ class ret_remi(App):
 
     def update_backlog_and_inventory_shipment(self, shipment):
         if shipment.data_list != "":
-            if self.backlog > int(shipment.data_list):
-                self.backlog -= int(shipment.data_list)
-                self.inventory = 0
-            else:
-                inv_remaining = int(shipment.data_list) - self.backlog
-                self.backlog = 0
-                self.inventory += inv_remaining
+             self.inventory += int(shipment.data_list)
+
 
     def update_backlog_and_inventory_demand(self):
         if int(self.current_demand) > int(self.inventory):
