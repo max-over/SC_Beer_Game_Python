@@ -217,7 +217,7 @@ class plant_remi(App):
     def update_backlog_and_inventory_demand(self, prodshipment):
         self.backlogtotal += self.current_demand - prodshipment
         if int(self.current_demand) > int(prodshipment):
-            self.backlog = int(self.current_demand) - int(prodshipment)
+            #self.backlog = int(self.current_demand) - int(prodshipment)
             self.backlogcount += 1
             self.inventory_finished = 0
         else:
