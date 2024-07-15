@@ -249,8 +249,8 @@ class SocketServer:
                     cz = shipment
                     #print(shipment)
                     break
-            else:
-                cz = ""
+                else:
+                    cz = 0
             if len(self.shipment_ret_queue) > 20:
                 self.shipment_ret_queue.pop(0)
         client.sendall(pickle.dumps(ProcessData("", cz, 0)))
@@ -262,8 +262,8 @@ class SocketServer:
                     cz = shipment
                     #print(shipment)
                     break
-            else:
-                cz = ""
+                else:
+                    cz = 0
             if len(self.shipment_distr_queue) > 20:
                 self.shipment_distr_queue.pop(0)
         client.sendall(pickle.dumps(ProcessData("", cz, 0)))
@@ -275,8 +275,8 @@ class SocketServer:
                     cz = shipment
                     #print(shipment)
                     break
-            else:
-                cz = ""
+                else:
+                    cz = 0
             if len(self.shipment_whole_queue) > 20:
                 self.shipment_whole_queue.pop(0)
         client.sendall(pickle.dumps(ProcessData("", cz, 0)))
