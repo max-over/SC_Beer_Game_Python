@@ -96,9 +96,11 @@ class adm_remi(App):
         label_adm_status.text = status_text
 
 
+
+
 # Configuration
 configuration = {'config_project_name': 'adm_remi', 'config_address': '0.0.0.0', 'config_port': 8084,
-                 'config_multiple_instance': True, 'config_enable_file_cache': True, 'config_start_browser': True,
+                 'config_multiple_instance': True,  'config_enable_file_cache': True, 'config_start_browser': True,
                  'config_resourcepath': './res/'}
 
 if __name__ == "__main__":

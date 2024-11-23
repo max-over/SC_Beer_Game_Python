@@ -96,6 +96,14 @@ class distr_remi(App):
                 self.n.send(pickle.dumps(ProcessData("get_distr", [0], 0)))
                 label_distr_info.set_text(f"Distributor connected to: {server}_{port}")
                 label_distr_info.css_visibility = "visible"
+                self.current_period = self.n.send(pickle.dumps(ProcessData("get_distr_lastperiod", [0], self.current_period)))
+                self.inventorycosts = self.n.send(pickle.dumps(ProcessData("get_distr_inventorycosts", [0], 0)))
+                self.backlogcosts = self.n.send(pickle.dumps(ProcessData("get_distr_backlogcosts", [0], 0)))
+                self.backlogtotal = self.n.send(pickle.dumps(ProcessData("get_distr_backlogtotal", [0], 0)))
+                self.costs = self.n.send(pickle.dumps(ProcessData("get_distr_costs", [0], 0)))
+                if self.current_period > 0:
+                    self.inventory = self.n.send(pickle.dumps(ProcessData("get_distr_inventory", [0], 0)))
+                self._disable_button(button_distr_order)
             except:
                 self.run = False
             self._enable_button(button_distr_update)
@@ -110,6 +118,7 @@ class distr_remi(App):
                                        label_distr_status, widget):
         server_period = self.n.send(pickle.dumps(ProcessData("upd_ret_period", [0], self.current_period)))
         ret_demand = self.n.send(pickle.dumps(ProcessData("upd_ret_distr_demand", [0], 0)))
+        # print(str(ret_demand.data_leadtimeup))
         self.current_demand = ret_demand.data_leadtimeup
         label_distr_demand.set_text(f"Demand: {self.current_demand}")
         if int(server_period) == 0:
@@ -188,9 +197,16 @@ class distr_remi(App):
             distr_order = int(textEditOrderDistributor.get_text())
             if distr_order >= 0:
                 self.n.send(pickle.dumps(ProcessData("distr_order", [0], distr_order)))
+                self.n.send(pickle.dumps(ProcessData("upd_distr_inventorycosts", [0], self.inventorycosts)))
+                self.n.send(pickle.dumps(ProcessData("upd_distr_backlogcosts", [0], self.backlogcosts)))
+                self.n.send(pickle.dumps(ProcessData("upd_distr_costs", [0], self.costs)))
+                self.n.send(pickle.dumps(ProcessData("upd_distr_lastperiod", [0], self.current_period)))
+                self.n.send(pickle.dumps(ProcessData("upd_distr_backlogtotal", [0], self.backlogtotal)))
+                self.n.send(pickle.dumps(ProcessData("upd_distr_inventory", [0], self.inventory)))
                 self.sheet_distr.write(int(self.current_period), 2, int(distr_order))
                 self.wb.save(f'distr_stat{textEditPortDistr.get_text()}_{self.xtime}.xls')
                 self._disable_button(button_distr_order)
+
             else:
                 distr_order = 0
         except ValueError:

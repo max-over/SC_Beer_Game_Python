@@ -81,6 +81,14 @@ class ret_remi(App):
                 self.n.send(pickle.dumps(ProcessData("get_ret", [0], 0)))
                 label_ret_info.set_text(f"Retailer connected to: {server}_{port}")
                 label_ret_info.css_visibility = "visible"
+                self.current_period = self.n.send(pickle.dumps(ProcessData("get_ret_lastperiod", [0], self.current_period)))
+                self.inventorycosts = self.n.send(pickle.dumps(ProcessData("get_ret_inventorycosts", [0], 0)))
+                self.backlogcosts = self.n.send(pickle.dumps(ProcessData("get_ret_backlogcosts", [0], 0)))
+                self.backlogtotal = self.n.send(pickle.dumps(ProcessData("get_ret_backlogtotal", [0], 0)))
+                self.costs = self.n.send(pickle.dumps(ProcessData("get_ret_costs", [0], 0)))
+                if self.current_period > 0:
+                    self.inventory = self.n.send(pickle.dumps(ProcessData("get_ret_inventory", [0], 0)))
+                self._disable_button(button_ret_order)
             except:
                 self.run = False
             self._enable_button(button_ret_update)
@@ -123,7 +131,7 @@ class ret_remi(App):
 
             demand = self.n.send(pickle.dumps(ProcessData("upd_ret_cust_demand", [0], 0)))
             self.current_demand = demand.data_leadtimeup
-            print(self.current_demand)
+            # print(self.current_demand)
 
             if self.current_period > 1:
                 shipment = self.n.send(pickle.dumps(ProcessData("upd_ret_distr_shipment",
@@ -149,6 +157,7 @@ class ret_remi(App):
             self.sheet_ret.write(int(self.current_period), 8, float(self.inventorycosts))
             self.sheet_ret.write(int(self.current_period), 9, float(self.backlogcosts))
             self.wb.save(f'ret_stat{textEditPortRet.get_text()}_{self.xtime}.xls')
+
 
         status_text = self.n.send(pickle.dumps(ProcessData("check_status_node", [0], 0)))
         label_ret_status.set_text(status_text)
@@ -179,6 +188,13 @@ class ret_remi(App):
             ret_order = int(textEditOrderRetailer.get_text())
             if ret_order >= 0:
                 self.n.send(pickle.dumps(ProcessData("ret_order", [0], ret_order)))
+
+                self.n.send(pickle.dumps(ProcessData("upd_ret_inventorycosts", [0], self.inventorycosts)))
+                self.n.send(pickle.dumps(ProcessData("upd_ret_backlogcosts", [0], self.backlogcosts)))
+                self.n.send(pickle.dumps(ProcessData("upd_ret_costs", [0], self.costs)))
+                self.n.send(pickle.dumps(ProcessData("upd_ret_lastperiod", [0], self.current_period)))
+                self.n.send(pickle.dumps(ProcessData("upd_ret_backlogtotal", [0], self.backlogtotal)))
+                self.n.send(pickle.dumps(ProcessData("upd_ret_inventory", [0], self.inventory)))
                 self.sheet_ret.write(int(self.current_period), 2, int(ret_order))
                 self.wb.save(f'ret_stat{textEditPortRet.get_text()}_{self.xtime}.xls')
                 self._disable_button(button_ret_order)

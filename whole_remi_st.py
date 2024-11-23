@@ -96,6 +96,14 @@ class whole_remi(App):
                 self.n.send(pickle.dumps(ProcessData("get_whole", [0], 0)))
                 label_whole_info.set_text(f"Wholesaler connected to: {server}_{port}")
                 label_whole_info.css_visibility = "visible"
+                self.current_period = self.n.send(pickle.dumps(ProcessData("get_whole_lastperiod", [0], self.current_period)))
+                self.inventorycosts = self.n.send(pickle.dumps(ProcessData("get_whole_inventorycosts", [0], 0)))
+                self.backlogcosts = self.n.send(pickle.dumps(ProcessData("get_whole_backlogcosts", [0], 0)))
+                self.backlogtotal = self.n.send(pickle.dumps(ProcessData("get_whole_backlogtotal", [0], 0)))
+                self.costs = self.n.send(pickle.dumps(ProcessData("get_whole_costs", [0], 0)))
+                if self.current_period > 0:
+                    self.inventory = self.n.send(pickle.dumps(ProcessData("get_whole_inventory", [0], 0)))
+                self._disable_button(button_whole_order)
             except:
                 self.run = False
             self._enable_button(button_whole_update)
@@ -187,6 +195,12 @@ class whole_remi(App):
             whole_order = int(textEditOrderWholesaler.get_text())
             if whole_order >= 0:
                 self.n.send(pickle.dumps(ProcessData("whole_order", [0], whole_order)))
+                self.n.send(pickle.dumps(ProcessData("upd_whole_inventorycosts", [0], self.inventorycosts)))
+                self.n.send(pickle.dumps(ProcessData("upd_whole_backlogcosts", [0], self.backlogcosts)))
+                self.n.send(pickle.dumps(ProcessData("upd_whole_costs", [0], self.costs)))
+                self.n.send(pickle.dumps(ProcessData("upd_whole_lastperiod", [0], self.current_period)))
+                self.n.send(pickle.dumps(ProcessData("upd_whole_backlogtotal", [0], self.backlogtotal)))
+                self.n.send(pickle.dumps(ProcessData("upd_whole_inventory", [0], self.inventory)))
                 self.sheet_whole.write(int(self.current_period), 2, int(whole_order))
                 self.wb.save(f'whole_stat{textEditPortWhole.get_text()}_{self.xtime}.xls')
                 self._disable_button(button_whole_order)

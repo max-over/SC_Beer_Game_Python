@@ -30,8 +30,6 @@ class plant_remi(App):
 
     def __init__(self, *args, **kwargs):
         self.xtime = str(round(time.time()))
-        self.shipment_plant_queue = []
-        self.production_plant_queue = []
         self.supplier_order = 0
         self.produced_lot = 0
         self.current_period = 0
@@ -48,7 +46,6 @@ class plant_remi(App):
         self.backlograte = BACKLOGRATE
         self.backlogcount = 0
         self.productiontime = PRODUCTIONTIME
-        self.prodshipmentList = []
         self.backlogcosts = 0
         self.inventorycosts = 0
         self.wb = Workbook()
@@ -94,20 +91,7 @@ class plant_remi(App):
         self._disable_button(widget)
         label_plant_info.set_text("Disconnected from server")
 
-    def on_button_plant_produce_pressed(self, textEditProdlotPlant, label_plant_inventory_raw, button_plant_order,
-                                        button_plant_produce, widget):
-        try:
-            prodlot = int(textEditProdlotPlant.get_text())
-            prodlot = min(prodlot, int(self.inventory_raw)) if prodlot >= 0 else 0
-            self.n.send(pickle.dumps(ProcessData("plant_prodlot", [0], prodlot)))
-            self.inventory_raw -= prodlot
-            label_plant_inventory_raw.set_text(f"Inventory raw: {self.inventory_raw}")
-            self.production_plant_queue.append([prodlot, self.current_period + self.productiontime])
-            self._disable_button(button_plant_produce)
-        except ValueError:
-            prodlot = 0
-        textEditProdlotPlant.set_text(str(prodlot))
-        self._enable_button(button_plant_order)
+
 
     def on_button_plant_connect_pressed(self, textEditPassPlant, textEditServerPlant, textEditPortPlant,
                                         label_plant_info, button_plant_update, button_plant_disconnect, widget):
@@ -123,6 +107,15 @@ class plant_remi(App):
                 self.n.send(pickle.dumps(ProcessData("get_plant", [0], 0)))
                 label_plant_info.set_text(f"Plant connected to: {server}_{port}")
                 label_plant_info.css_visibility = "visible"
+                self.current_period = self.n.send(pickle.dumps(ProcessData("get_plant_lastperiod", [0], self.current_period)))
+                self.inventorycosts = self.n.send(pickle.dumps(ProcessData("get_plant_inventorycosts", [0], 0)))
+                self.backlogcosts = self.n.send(pickle.dumps(ProcessData("get_plant_backlogcosts", [0], 0)))
+                self.backlogtotal = self.n.send(pickle.dumps(ProcessData("get_plant_backlogtotal", [0], 0)))
+                self.costs = self.n.send(pickle.dumps(ProcessData("get_plant_costs", [0], 0)))
+                if self.current_period > 0:
+                    self.inventory_raw = self.n.send(pickle.dumps(ProcessData("get_plant_inventory_raw", [0], 0)))
+                    self.inventory_finished = self.n.send(pickle.dumps(ProcessData("get_plant_inventory_finished", [0], 0)))
+                self._disable_button(button_plant_order)
             except:
                 self.run = False
             self._enable_button(button_plant_update)
@@ -148,23 +141,15 @@ class plant_remi(App):
             self.sheet_plant.write(int(self.current_period), 0, int(self.current_period))
             self.wb.save(f"plant_stat{textEditPortPlant.get_text()}_{self.xtime}.xls")
 
-            self.supplier_order = next((
-                int(row[0]) for row in self.shipment_plant_queue if int(row[1]) == self.current_period - self.leadtimeup
-            ), 0)
-
-            self.inventory_raw += self.supplier_order
-
-            if len(self.shipment_plant_queue) > 20:
-                self.shipment_plant_queue.pop(0)
-
-            self.produced_lot = next((
-                int(row[0]) for row in self.production_plant_queue if int(row[1]) == self.current_period
-            ), 0)
-
-            if len(self.production_plant_queue) > 20:
-                self.production_plant_queue.pop(0)
-
-            self.inventory_finished += self.produced_lot
+            if self.current_period > 1:
+                shipment = self.n.send(
+                    pickle.dumps(ProcessData("upd_plant_suppl_shipment", [self.current_period], self.leadtimeup)))
+                if shipment.data_list != "":
+                    self.inventory_raw += int(shipment.data_list)
+                produced_lot = self.n.send(
+                    pickle.dumps(ProcessData("upd_plant_produce_shipment", [self.current_period], self.leadtimeup)))
+                if produced_lot.data_list != "":
+                    self.inventory_finished += int(produced_lot.data_list)
 
             self.update_costs()
 
@@ -195,7 +180,6 @@ class plant_remi(App):
             self.sl = 1 - self.backlogcount / self.current_period
 
             self.n.send(pickle.dumps(ProcessData("plant_shipment", [0], prodshipment)))
-
             self.sheet_plant.write(int(self.current_period), 1, int(self.current_demand))
             self.sheet_plant.write(int(self.current_period), 3, prodshipment)
             self.sheet_plant.write(int(self.current_period), 4, int(self.inventory_raw))
@@ -217,18 +201,39 @@ class plant_remi(App):
     def update_backlog_and_inventory_demand(self, prodshipment):
         self.backlogtotal += self.current_demand - prodshipment
         if int(self.current_demand) > int(prodshipment):
-            #self.backlog = int(self.current_demand) - int(prodshipment)
+            self.backlog = int(self.current_demand) - int(prodshipment)
             self.backlogcount += 1
             self.inventory_finished = 0
         else:
             self.inventory_finished += - int(prodshipment)
 
+    def on_button_plant_produce_pressed(self, textEditProdlotPlant, label_plant_inventory_raw, button_plant_order,
+                                        button_plant_produce, widget):
+        try:
+            prodlot = int(textEditProdlotPlant.get_text())
+            prodlot = min(prodlot, int(self.inventory_raw)) if prodlot >= 0 else 0
+            self.n.send(pickle.dumps(ProcessData("plant_prodlot",  prodlot, self.current_period + self.productiontime)))
+            self.inventory_raw -= prodlot
+            label_plant_inventory_raw.set_text(f"Inventory raw: {self.inventory_raw}")
+            self._disable_button(button_plant_produce)
+        except ValueError:
+            prodlot = 0
+        textEditProdlotPlant.set_text(str(prodlot))
+        self._enable_button(button_plant_order)
+
     def on_button_plant_order_pressed(self, textEditOrderPlant, button_plant_order, textEditPortPlant, widget):
         try:
             prodorder = int(textEditOrderPlant.get_text())
             if prodorder >= 0:
-                self.n.send(pickle.dumps(ProcessData("plant_order", [0], prodorder)))
-                self.shipment_plant_queue.append((prodorder, self.current_period))
+                self.n.send(
+                    pickle.dumps(ProcessData("plant_order", prodorder, self.current_period + self.leadtimeup)))
+                self.n.send(pickle.dumps(ProcessData("upd_plant_inventorycosts", [0], self.inventorycosts)))
+                self.n.send(pickle.dumps(ProcessData("upd_plant_backlogcosts", [0], self.backlogcosts)))
+                self.n.send(pickle.dumps(ProcessData("upd_plant_costs", [0], self.costs)))
+                self.n.send(pickle.dumps(ProcessData("upd_plant_lastperiod", [0], self.current_period)))
+                self.n.send(pickle.dumps(ProcessData("upd_plant_backlogtotal", [0], self.backlogtotal)))
+                self.n.send(pickle.dumps(ProcessData("upd_plant_inventory_raw", [0], self.inventory_raw)))
+                self.n.send(pickle.dumps(ProcessData("upd_plant_inventory_finished", [0], self.inventory_finished)))
                 self.sheet_plant.write(int(self.current_period), 2, int(prodorder))
                 self.wb.save(f"plant_stat{textEditPortPlant.get_text()}_{self.xtime}.xls")
                 self._disable_button(button_plant_order)
