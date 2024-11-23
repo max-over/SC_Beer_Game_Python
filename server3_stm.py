@@ -211,8 +211,9 @@ class SocketServer:
             self.plant_order = data.data_list
             print(f"plant order: {self.plant_order}")
             self.shipment_plant_queue.append((self.plant_order, data.data_leadtimeup))
-            # sheet_plant.write(int(self.currentPeriod), 3, int(self.plantProdlot))
-            # wb.save(f'xlwt_example{self.port}_{xtime}.xls')
+            sheet_plant.write(int(self.currentPeriod), 2, int(self.plant_order))
+            wb.save(f'xlwt_example{self.port}_{xtime}.xls')
+
         client.sendall(pickle.dumps(""))
 
     def handle_upd_ret_cust_demand(self, client, data):
