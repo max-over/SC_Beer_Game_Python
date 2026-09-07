@@ -23,7 +23,7 @@ class ProcessData:
         self.data_leadtimeup = data_leadtimeup
 
 
-class whole_remi(App):
+class Wholesaler(App):
 
     def __init__(self, *args, **kwargs):
         self.xtime = str(round(time.time()))
@@ -55,7 +55,7 @@ class whole_remi(App):
         self.sheet_whole.write(0, 9, "Backlog_Costs")
         # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
         if not 'editing_mode' in kwargs.keys():
-            super(whole_remi, self).__init__(*args, static_file_path={'my_res': './res/'})
+            super(Wholesaler, self).__init__(*args, static_file_path={'my_res': './res/'})
 
     def idle(self):
         # idle function called every update cycle
@@ -213,11 +213,11 @@ class whole_remi(App):
 
 
 # Configuration
-configuration = {'config_project_name': 'whole_remi', 'config_address': '0.0.0.0', 'config_port': 8086, 'config_multiple_instance': True, 'config_enable_file_cache': True, 'config_start_browser': True, 'config_resourcepath': './res/'}
+configuration = {'config_project_name': 'Wholesaler', 'config_address': '0.0.0.0', 'config_port': 8086, 'config_multiple_instance': True, 'config_enable_file_cache': True, 'config_start_browser': True, 'config_resourcepath': './res/'}
 
 if __name__ == "__main__":
     # start(MyApp,address='127.0.0.1', port=8081, multiple_instance=False,enable_file_cache=True, update_interval=0.1, start_browser=True)
-    start(whole_remi, address=configuration['config_address'], port=configuration['config_port'],
+    start(Wholesaler, address=configuration['config_address'], port=configuration['config_port'],
                         multiple_instance=configuration['config_multiple_instance'], 
                         enable_file_cache=configuration['config_enable_file_cache'],
                         start_browser=configuration['config_start_browser'])
