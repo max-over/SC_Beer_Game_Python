@@ -1,15 +1,20 @@
 
 # -*- coding: utf-8 -*-
 
-from remi import start, App
 import adm_remi_st_gui
-
-from network3 import Network
 import pickle
+import sys
 import time
+from network3 import Network
+from remi import start, App
 
 DISABLED_COLOR = "rgb(200,200,200)"
 ENABLED_COLOR = "rgb(100,100,100)"
+CONFIG_PORT = 8084
+SERVER_PORT = 5555
+if len(sys.argv) > 2:
+    SERVER_PORT = int(sys.argv[2])
+    CONFIG_PORT = int(sys.argv[1])
 
 
 class ProcessData:
@@ -32,7 +37,7 @@ class Admin(App):
         pass
 
     def main(self):
-        self.root = adm_remi_st_gui.construct_ui(self)
+        self.root = adm_remi_st_gui.construct_ui(self, SERVER_PORT)
         self.current_period = 1
         self.adm_period = 0
         return self.root
@@ -99,7 +104,7 @@ class Admin(App):
 
 
 # Configuration
-configuration = {'config_project_name': 'Admin', 'config_address': '0.0.0.0', 'config_port': 8084,
+configuration = {'config_project_name': 'Admin', 'config_address': '0.0.0.0', 'config_port': CONFIG_PORT,
                  'config_multiple_instance': True,  'config_enable_file_cache': True, 'config_start_browser': True,
                  'config_resourcepath': './res/'}
 

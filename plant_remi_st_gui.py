@@ -3,7 +3,7 @@ import plant_remi_st
 import functools
 
 
-def construct_ui(self):
+def construct_ui(self, server_port):
     # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
     container0 = Container()
     container0.attr_class = "Container"
@@ -199,7 +199,7 @@ def construct_ui(self):
     self.textEditPortPlant.css_text_align = "center"
     self.textEditPortPlant.css_top = "510.0px"
     self.textEditPortPlant.css_width = "120.0px"
-    self.textEditPortPlant.text = "5555"
+    self.textEditPortPlant.text = str(server_port)
     self.textEditPortPlant.variable_name = "textEditPortPlant"
     container0.append(self.textEditPortPlant, 'textEditPortPlant')
     self.button_plant_connect = Button()

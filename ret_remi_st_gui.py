@@ -3,7 +3,7 @@ import ret_remi_st
 import functools
 
 
-def construct_ui(self):
+def construct_ui(self, server_port):
     # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
     container0 = Container()
     container0.attr_class = "Container"
@@ -147,7 +147,7 @@ def construct_ui(self):
     self.textEditPortRet.css_text_align = "center"
     self.textEditPortRet.css_top = "510.0px"
     self.textEditPortRet.css_width = "120.0px"
-    self.textEditPortRet.text = "5555"
+    self.textEditPortRet.text = str(server_port)
     self.textEditPortRet.variable_name = "textEditPortRet"
     container0.append(self.textEditPortRet, 'textEditPortRet')
     self.button_ret_connect = Button()

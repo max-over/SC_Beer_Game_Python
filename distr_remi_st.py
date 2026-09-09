@@ -1,12 +1,13 @@
 
 # -*- coding: utf-8 -*-
 
-from remi import start, App
 import distr_remi_st_gui
-from network3 import Network
 import pickle
-from xlwt import Workbook
+import sys
 import time
+from network3 import Network
+from remi import start, App
+from xlwt import Workbook
 
 DISABLED_COLOR = "rgb(200,200,200)"
 ENABLED_COLOR = "rgb(158,176,253)"
@@ -14,6 +15,12 @@ HOLDINGRATE = 2
 BACKLOGRATE = 4
 LEADTIMEUP = 2
 INVENTORY = 20
+
+CONFIG_PORT = 8085
+SERVER_PORT = 5555
+if len(sys.argv) > 2:
+    SERVER_PORT = int(sys.argv[2])
+    CONFIG_PORT = int(sys.argv[1])
 
 
 class ProcessData:
@@ -62,7 +69,7 @@ class Distributor(App):
         pass
     
     def main(self):
-        self.root = distr_remi_st_gui.construct_ui(self)
+        self.root = distr_remi_st_gui.construct_ui(self, SERVER_PORT)
         return self.root
 
     def is_valid_password(self, password):
@@ -216,7 +223,7 @@ class Distributor(App):
 
 
 # Configuration
-configuration = {'config_project_name': 'Distributor', 'config_address': '0.0.0.0', 'config_port': 8085, 'config_multiple_instance': True, 'config_enable_file_cache': True, 'config_start_browser': True, 'config_resourcepath': './res/'}
+configuration = {'config_project_name': 'Distributor', 'config_address': '0.0.0.0', 'config_port': CONFIG_PORT, 'config_multiple_instance': True, 'config_enable_file_cache': True, 'config_start_browser': True, 'config_resourcepath': './res/'}
 
 if __name__ == "__main__":
     # start(MyApp,address='127.0.0.1', port=8081, multiple_instance=False,enable_file_cache=True, update_interval=0.1, start_browser=True)
