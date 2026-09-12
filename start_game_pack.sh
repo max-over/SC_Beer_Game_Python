@@ -13,11 +13,11 @@ RET_PORT=$((8089+PACK_NUM*10))
 
 echo "Starting game pack with ports $SERVER_PORT $ADM_PORT $DISTR_PORT $WHOLE_PORT $PLANT_PORT $RET_PORT"
 
-python3 server3_stm.py $SERVER_PORT &
-python3 adm_remi_st.py $ADM_PORT $SERVER_PORT &
-python3 distr_remi_st.py $DISTR_PORT $SERVER_PORT &
-python3 whole_remi_st.py $WHOLE_PORT $SERVER_PORT &
-python3 plant_remi_st.py $PLANT_PORT $SERVER_PORT &
-python3 ret_remi_st.py $RET_PORT $SERVER_PORT &
+nohup python3 server3_stm.py $SERVER_PORT &
+nohup python3 adm_remi_st.py $ADM_PORT $SERVER_PORT &
+nohup python3 distr_remi_st.py $DISTR_PORT $SERVER_PORT &
+nohup python3 whole_remi_st.py $WHOLE_PORT $SERVER_PORT &
+nohup python3 plant_remi_st.py $PLANT_PORT $SERVER_PORT &
+nohup python3 ret_remi_st.py $RET_PORT $SERVER_PORT &
 
 echo "Started game pack with ports $SERVER_PORT $ADM_PORT $DISTR_PORT $WHOLE_PORT $PLANT_PORT $RET_PORT"
