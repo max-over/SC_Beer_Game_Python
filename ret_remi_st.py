@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 
-from remi import start, App
-import ret_remi_st_gui
-from network3 import Network
 import pickle
-from xlwt import Workbook
+import ret_remi_st_gui
+import sys
 import time
+from network3 import Network
+from remi import start, App
+from xlwt import Workbook
 
 DISABLED_COLOR = "rgb(200,200,200)"
 ENABLED_COLOR = "rgb(0,200,200)"
@@ -15,6 +16,11 @@ HOLDINGRATE = 4
 BACKLOGRATE = 10
 LEADTIMEUP = 2
 INVENTORY = 20
+CONFIG_PORT = 8089
+SERVER_PORT = 5555
+if len(sys.argv) > 2:
+    SERVER_PORT = int(sys.argv[2])
+    CONFIG_PORT = int(sys.argv[1])
 
 
 class ProcessData:
@@ -24,7 +30,7 @@ class ProcessData:
         self.data_leadtimeup = data_leadtimeup
 
 
-class ret_remi(App):
+class Retailer(App):
 
     def __init__(self, *args, **kwargs):
         # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
@@ -56,14 +62,14 @@ class ret_remi(App):
         self.sheet_ret.write(0, 8, "Inventory_Costs")
         self.sheet_ret.write(0, 9, "Lost_sales_Costs")
         if not 'editing_mode' in kwargs.keys():
-            super(ret_remi, self).__init__(*args, static_file_path={'my_res':'./res/'})
+            super(Retailer, self).__init__(*args, static_file_path={'my_res':'./res/'})
 
     def idle(self):
         # idle function called every update cycle
         pass
     
     def main(self):
-        self.root = ret_remi_st_gui.construct_ui(self)
+        self.root = ret_remi_st_gui.construct_ui(self, SERVER_PORT)
         return self.root
 
     def on_button_ret_connect_pressed(self, textEditPassRet, textEditServerRet, textEditPortRet, label_ret_info,
@@ -207,11 +213,11 @@ class ret_remi(App):
 
 
 # Configuration
-configuration = {'config_project_name': 'ret_remi', 'config_address': '0.0.0.0', 'config_port': 8089, 'config_multiple_instance': True, 'config_enable_file_cache': True, 'config_start_browser': True, 'config_resourcepath': './res/'}
+configuration = {'config_project_name': 'Retailer', 'config_address': '0.0.0.0', 'config_port': CONFIG_PORT, 'config_multiple_instance': True, 'config_enable_file_cache': True, 'config_start_browser': True, 'config_resourcepath': './res/'}
 
 if __name__ == "__main__":
     # start(MyApp,address='127.0.0.1', port=8081, multiple_instance=False,enable_file_cache=True, update_interval=0.1, start_browser=True)
-    start(ret_remi, address=configuration['config_address'], port=configuration['config_port'], 
+    start(Retailer, address=configuration['config_address'], port=configuration['config_port'], 
                         multiple_instance=configuration['config_multiple_instance'], 
                         enable_file_cache=configuration['config_enable_file_cache'],
                         start_browser=configuration['config_start_browser'])

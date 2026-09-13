@@ -3,7 +3,7 @@ import distr_remi_st
 import functools
 
 
-def construct_ui(self):
+def construct_ui(self, server_port):
     # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
     container0 = Container()
     container0.attr_class = "Container"
@@ -172,7 +172,7 @@ def construct_ui(self):
     self.textEditPortDistr.css_text_align = "center"
     self.textEditPortDistr.css_top = "510.0px"
     self.textEditPortDistr.css_width = "120.0px"
-    self.textEditPortDistr.text = "5555"
+    self.textEditPortDistr.text = str(server_port)
     self.textEditPortDistr.variable_name = "textEditPortDistr"
     container0.append(self.textEditPortDistr, 'textEditPortDistr')
     self.button_distr_connect = Button()

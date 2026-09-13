@@ -3,7 +3,7 @@ import whole_remi_st
 import functools
 
 
-def construct_ui(self):
+def construct_ui(self, server_port):
     # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
     container0 = Container()
     container0.attr_class = "Container"
@@ -171,7 +171,7 @@ def construct_ui(self):
     self.textEditPortWhole.css_text_align = "center"
     self.textEditPortWhole.css_top = "510.0px"
     self.textEditPortWhole.css_width = "120.0px"
-    self.textEditPortWhole.text = "5555"
+    self.textEditPortWhole.text = str(server_port)
     self.textEditPortWhole.variable_name = "textEditPortWhole"
     container0.append(self.textEditPortWhole, 'textEditPortWhole')
     self.button_whole_connect = Button()

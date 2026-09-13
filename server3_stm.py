@@ -1,7 +1,9 @@
-import socket
-import threading
 import pickle
+import socket
+import sys
+import threading
 import time
+
 from xlwt import Workbook
 
 xtime = str(round(time.time()))
@@ -16,6 +18,8 @@ class ProcessData:
 
 HOST = ""
 PORT = 5555
+if len(sys.argv) > 1:
+    PORT = int(sys.argv[1])
 
 wb = Workbook()
 

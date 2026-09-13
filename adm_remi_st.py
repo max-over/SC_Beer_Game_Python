@@ -1,15 +1,20 @@
 
 # -*- coding: utf-8 -*-
 
-from remi import start, App
 import adm_remi_st_gui
-
-from network3 import Network
 import pickle
+import sys
 import time
+from network3 import Network
+from remi import start, App
 
 DISABLED_COLOR = "rgb(200,200,200)"
 ENABLED_COLOR = "rgb(100,100,100)"
+CONFIG_PORT = 8084
+SERVER_PORT = 5555
+if len(sys.argv) > 2:
+    SERVER_PORT = int(sys.argv[2])
+    CONFIG_PORT = int(sys.argv[1])
 
 
 class ProcessData:
@@ -19,20 +24,20 @@ class ProcessData:
         self.data_leadtimeup = data_leadtimeup
 
 
-class adm_remi(App):
+class Admin(App):
     xtime = str(round(time.time()))
 
     def __init__(self, *args, **kwargs):
         # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
         if not 'editing_mode' in kwargs.keys():
-            super(adm_remi, self).__init__(*args, static_file_path={'my_res':'./res/'})
+            super(Admin, self).__init__(*args, static_file_path={'my_res':'./res/'})
 
     def idle(self):
         # idle function called every update cycle
         pass
 
     def main(self):
-        self.root = adm_remi_st_gui.construct_ui(self)
+        self.root = adm_remi_st_gui.construct_ui(self, SERVER_PORT)
         self.current_period = 1
         self.adm_period = 0
         return self.root
@@ -99,13 +104,13 @@ class adm_remi(App):
 
 
 # Configuration
-configuration = {'config_project_name': 'adm_remi', 'config_address': '0.0.0.0', 'config_port': 8084,
+configuration = {'config_project_name': 'Admin', 'config_address': '0.0.0.0', 'config_port': CONFIG_PORT,
                  'config_multiple_instance': True,  'config_enable_file_cache': True, 'config_start_browser': True,
                  'config_resourcepath': './res/'}
 
 if __name__ == "__main__":
     # start(MyApp,address='127.0.0.1', port=8081, multiple_instance=False,enable_file_cache=True, update_interval=0.1, start_browser=True)
-    start(adm_remi, address=configuration['config_address'], port=configuration['config_port'],
+    start(Admin, address=configuration['config_address'], port=configuration['config_port'],
                         multiple_instance=configuration['config_multiple_instance'], 
                         enable_file_cache=configuration['config_enable_file_cache'],
                         start_browser=configuration['config_start_browser'])

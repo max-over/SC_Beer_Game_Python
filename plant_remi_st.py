@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 
-from remi import start, App
-import plant_remi_st_gui
-from network3 import Network
 import pickle
-from xlwt import Workbook
+import plant_remi_st_gui
+import sys
 import time
+from network3 import Network
+from remi import start, App
+from xlwt import Workbook
 
 DISABLED_COLOR = "rgb(200,200,200)"
 ENABLED_COLOR = "rgb(184,184,105)"
@@ -19,6 +20,12 @@ INVENTORY_RAW = 25
 INVENTORY_FINISHED = 20
 PRODUCTIONTIME = 2
 
+CONFIG_PORT = 8087
+SERVER_PORT = 5555
+if len(sys.argv) > 2:
+    SERVER_PORT = int(sys.argv[2])
+    CONFIG_PORT = int(sys.argv[1])
+
 class ProcessData:
     def __init__(self, data_id, data_list, data_leadtimeup):
         self.data_id = data_id
@@ -26,7 +33,7 @@ class ProcessData:
         self.data_leadtimeup = data_leadtimeup
 
 
-class plant_remi(App):
+class Plant(App):
 
     def __init__(self, *args, **kwargs):
         self.xtime = str(round(time.time()))
@@ -64,14 +71,14 @@ class plant_remi(App):
         self.sheet_plant.write(0, 11, "Backlog_Costs")
         # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
         if not 'editing_mode' in kwargs.keys():
-            super(plant_remi, self).__init__(*args, static_file_path={'my_res':'./res/'})
+            super(Plant, self).__init__(*args, static_file_path={'my_res':'./res/'})
 
     def idle(self):
         # idle function called every update cycle
         pass
     
     def main(self):
-        self.root = plant_remi_st_gui.construct_ui(self)
+        self.root = plant_remi_st_gui.construct_ui(self, SERVER_PORT)
         return self.root
 
     def is_valid_password(self, password):
@@ -245,11 +252,11 @@ class plant_remi(App):
 
 
 # Configuration
-configuration = {'config_project_name': 'plant_remi', 'config_address': '0.0.0.0', 'config_port': 8087, 'config_multiple_instance': True, 'config_enable_file_cache': True, 'config_start_browser': True, 'config_resourcepath': './res/'}
+configuration = {'config_project_name': 'Plant', 'config_address': '0.0.0.0', 'config_port': CONFIG_PORT, 'config_multiple_instance': True, 'config_enable_file_cache': True, 'config_start_browser': True, 'config_resourcepath': './res/'}
 
 if __name__ == "__main__":
     # start(MyApp,address='127.0.0.1', port=8081, multiple_instance=False,enable_file_cache=True, update_interval=0.1, start_browser=True)
-    start(plant_remi, address=configuration['config_address'], port=configuration['config_port'],
+    start(Plant, address=configuration['config_address'], port=configuration['config_port'],
                         multiple_instance=configuration['config_multiple_instance'], 
                         enable_file_cache=configuration['config_enable_file_cache'],
                         start_browser=configuration['config_start_browser'])

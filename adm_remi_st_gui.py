@@ -7,7 +7,7 @@ ENABLED_COLOR = "rgb(100,100,100)"
 
 
 # @staticmethod
-def construct_ui(self):
+def construct_ui(self, server_port):
     # DON'T MAKE CHANGES HERE, THIS METHOD GETS OVERWRITTEN WHEN SAVING IN THE EDITOR
     container0 = Container()
     container0.attr_class = "Container"
@@ -191,7 +191,7 @@ def construct_ui(self):
     self.textEditPortAdm.css_position = "absolute"
     self.textEditPortAdm.css_top = "510.0px"
     self.textEditPortAdm.css_width = "120.0px"
-    self.textEditPortAdm.text = "5555"
+    self.textEditPortAdm.text = str(server_port)
     self.textEditPortAdm.css_text_align = "center"
     self.textEditPortAdm.variable_name = "textEditPortAdm"
     container0.append(self.textEditPortAdm, 'textEditPortAdm')
